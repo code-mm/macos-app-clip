@@ -2,6 +2,35 @@
 
 原生 macOS 菜单栏剪贴板记录器。SwiftUI 界面，AppKit 管理菜单栏、窗口与系统剪贴板，Bundle ID 为 `com.codemm.cliprecord`。
 
+![剪贴板 ClipRecord 宣传图：随手记录，随时取用](docs/media/promo-cover.png)
+
+**双击 F1 呼出面板，双击 F2 静默记录。** 文字和图片按需保存，图片可放大，长文本可独立阅读。
+
+## 界面展示
+
+以下展示图均使用虚构文字和应用自有图标，不包含真实剪贴板、账号、聊天或桌面信息。上方为宣传合成图，下方由当前版本的原生 SwiftUI 界面渲染，点击可查看原图。
+
+<table>
+  <tr>
+    <th>记录面板 · 收录与搜索</th>
+    <th>快捷键与设置</th>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><a href="docs/media/main-panel.png"><img src="docs/media/main-panel.png" width="420" alt="虚构记录的主面板，展示文字、图片、搜索与粘贴记录入口"></a></td>
+    <td width="50%" align="center"><a href="docs/media/settings.png"><img src="docs/media/settings.png" width="420" alt="快捷键设置，双击 F1 显示隐藏，双击 F2 静默记录"></a></td>
+  </tr>
+  <tr>
+    <th>图片预览 · 放大后再复制</th>
+    <th>长文本预览 · 完整阅读与复制</th>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/media/image-preview.png"><img src="docs/media/image-preview.png" width="420" alt="应用自有图标的图片预览，支持缩放与复制图片"></a></td>
+    <td align="center"><a href="docs/media/text-preview.png"><img src="docs/media/text-preview.png" width="420" alt="虚构项目笔记的长文本预览，支持字号调整与复制全文"></a></td>
+  </tr>
+</table>
+
+图片来源与重新生成方法见 [展示素材说明](docs/media/README.md)。
+
 ## 运行
 
 要求 macOS 14 或更新版本。当前构建产物为 Apple Silicon（arm64）。
