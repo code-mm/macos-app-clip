@@ -6,6 +6,18 @@
 
 **双击 F1 呼出面板，双击 F2 静默记录。** 文字和图片按需保存，图片可放大，长文本可独立阅读。
 
+## 下载安装
+
+适用于 **macOS 14 及以上、Apple Silicon（M 系列）**。
+
+- [下载 DMG 安装包](https://github.com/code-mm/macos-app-clip/releases/latest)：在 Assets 中选择 `ClipRecord-版本号-macOS-arm64.dmg`。
+- 打开 DMG，将 **ClipRecord.app** 拖到 **Applications（应用程序）**，再从应用程序中启动。应用常驻菜单栏，不显示 Dock 图标。
+- 更新前先退出旧版本，再替换应用；已有记录保留在用户资料库中。也提供 ZIP 和 `SHA256SUMS.txt` 供下载与校验。
+
+GitHub Release 安装包使用 Developer ID 签名，目前**尚未经过 Apple 公证**。首次打开可能出现系统拦截；确认下载来源与校验值后，按 [Apple 官方说明](https://support.apple.com/zh-cn/102445) 在“系统设置 → 隐私与安全性”处理。本项目不要求关闭 Gatekeeper 或运行移除隔离属性的命令。
+
+当前仓库为私有，下载需要登录有访问权限的 GitHub 账号。安装包不包含演示记录、个人剪贴板内容或运行日志。
+
 ## 界面展示
 
 以下展示图均使用虚构文字和应用自有图标，不包含真实剪贴板、账号、聊天或桌面信息。上方为宣传合成图，下方由当前版本的原生 SwiftUI 界面渲染，点击可查看原图。
@@ -42,7 +54,7 @@ open build/ClipRecord.app
 
 也可使用 Xcode 打开 `Package.swift` 阅读和开发；可双击的应用包由构建脚本组装。无需外部 Swift Package 依赖。
 
-当前产物使用本地 ad-hoc 签名，适合本机体验。尚未进行 Developer ID 签名、公证和分发安装验收。
+此开发脚本默认使用本地 ad-hoc 签名。发布打包脚本为 `scripts/package-release.sh`，可通过 `SIGNING_IDENTITY` 指定 Developer ID 证书；下载版的签名与验证状态见对应 Release 说明。
 
 ## 使用
 
