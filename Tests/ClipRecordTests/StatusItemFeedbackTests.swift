@@ -4,6 +4,12 @@ import XCTest
 
 @MainActor
 final class StatusItemFeedbackTests: XCTestCase {
+    func testBundledSuccessSoundCanBeDecodedWithoutPlaying() throws {
+        let sound = try XCTUnwrap(StatusItemFeedback.loadSuccessSound())
+        XCTAssertEqual(sound.duration, 1.304, accuracy: 0.01)
+        XCTAssertFalse(sound.isPlaying)
+    }
+
     func testBlinkFinishesAndRestoresOriginalIcon() async {
         let button = NSButton()
         let original = NSImage(size: NSSize(width: 18, height: 18))

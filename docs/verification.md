@@ -96,3 +96,11 @@
 - 35 项测试通过，包含绿色通道／非模板图、失败色、重复触发与恢复；测试声音使用模拟播放器。
 - 用户在本对话实测确认：绿色闪烁和声音都正常，声音比之前明显，面板没有弹出。成功反馈的用户感知验收通过；失败反馈仍以自动测试结果为依据。
 - 证据：`build/green-feedback-test-results.txt`、`build/green-feedback-release-build.txt`、`build/green-feedback-validation.json`。
+
+## 1.0.7：自定义 F2 成功音效
+
+- 将用户提供的 `mixkit-confirmation-tone-2867.wav` 原字节内置为 `record-success.wav`，时长约 1.304 秒、大小 230,132 字节。运行时从应用资源加载并复用，不依赖用户下载目录。
+- 仅替换 F2 保存成功音效；绿色闪烁、失败提示音、F1 开关面板、F2 静默保存及系统音量保持原行为。
+- 36 项自动测试通过，新增测试验证内置音效可解码、时长正确且不会在测试时自动播放。首次测试遇到旧测试包缓存资源缺失，清理已生成的测试包后通过。
+- Release 1.0.7/code 8 构建与签名校验通过，资源 SHA-256 与原始文件一致。本地新版已重启，原有记录索引保持不变；用户随后实测确认音效正常。
+- 证据：`build/custom-sound-tests.txt`、`build/custom-sound-build.txt`、`build/custom-sound-validation.json`。

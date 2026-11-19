@@ -10,7 +10,7 @@ final class StatusItemFeedback {
     private let normalAlpha: CGFloat
     private let log: RuntimeLog?
     private let soundPlayer: ((Bool) -> Bool)?
-    private lazy var successSound = NSSound(named: "Ping")
+    private lazy var successSound = Self.loadSuccessSound()
     private lazy var failureSound = NSSound(named: "Basso")
     private var flashTask: Task<Void, Never>?
 
@@ -21,6 +21,11 @@ final class StatusItemFeedback {
         normalAlpha = button.alphaValue
         self.log = log
         self.soundPlayer = soundPlayer
+    }
+
+    static func loadSuccessSound() -> NSSound? {
+        guard let url = Bundle.module.url(forResource: "record-success", withExtension: "wav") else { return nil }
+        return NSSound(contentsOf: url, byReference: false)
     }
 
     @discardableResult
