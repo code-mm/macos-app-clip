@@ -4,10 +4,43 @@ import XCTest
 
 @MainActor
 final class StatusItemFeedbackTests: XCTestCase {
-    func testBundledSuccessSoundCanBeDecodedWithoutPlaying() throws {
+    func testDefaultSuccessSoundIsSystemPing() throws {
         let sound = try XCTUnwrap(StatusItemFeedback.loadSuccessSound())
-        XCTAssertEqual(sound.duration, 1.304, accuracy: 0.01)
+        XCTAssertEqual(sound.name, "Ping")
         XCTAssertFalse(sound.isPlaying)
+    }
+
+    func testMissingOrInvalidLocalSoundFallsBack() throws {
+        let folder = try makeTemporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let missing = folder.appendingPathComponent("missing.wav")
+        let invalid = folder.appendingPathComponent("invalid.wav")
+        try Data("not WAV data".utf8).write(to: invalid)
+        let ping = try XCTUnwrap(NSSound(named: "Ping"))
+        for url in [missing, invalid] {
+            XCTAssertTrue(StatusItemFeedback.loadSuccessSound(localURL: url, fallback: { ping }) === ping)
+        }
+    }
+
+    func testValidLocalWavUsesOverrideWithoutPlaying() throws {
+        let folder = try makeTemporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let url = folder.appendingPathComponent("record-success.wav")
+        // Synthetic 100 ms PCM WAV fixture; no third-party sound ships with tests.
+        var data = Data([82,73,70,70,100,6,0,0,87,65,86,69,102,109,116,32,
+                         16,0,0,0,1,0,1,0,64,31,0,0,128,62,0,0,2,0,16,0,
+                         100,97,116,97,64,6,0,0])
+        data.append(Data(repeating: 0, count: 1600))
+        try data.write(to: url)
+        let sound = try XCTUnwrap(StatusItemFeedback.loadSuccessSound(localURL: url, fallback: { nil }))
+        XCTAssertEqual(sound.duration, 0.1, accuracy: 0.02)
+        XCTAssertFalse(sound.isPlaying)
+    }
+
+    private func makeTemporaryFolder() throws -> URL {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
     }
 
     func testBlinkFinishesAndRestoresOriginalIcon() async {

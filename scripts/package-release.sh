@@ -19,10 +19,14 @@ if [[ "$arch" != "arm64" ]]; then
   echo "This package is named for Apple Silicon; got architecture: $arch" >&2
   exit 1
 fi
-mkdir -p "$output"
 stage="$(mktemp -d "$PWD/build/release-stage.XXXXXX")"
 trap 'rm -rf "$stage"' EXIT
 ditto --norsrc --noextattr build/ClipRecord.app "$stage/ClipRecord.app"
+if [[ -n "$(find "$stage/ClipRecord.app" -iname '*.wav' -print -quit)" ]]; then
+  echo "Refusing to package a bundled WAV; local overrides belong in Application Support." >&2
+  exit 1
+fi
+mkdir -p "$output"
 # Debug symbols stay in the local build, outside the downloadable app.
 strip -S "$stage/ClipRecord.app/Contents/MacOS/ClipRecord"
 if [[ "$identity" == "-" ]]; then

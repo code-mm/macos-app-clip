@@ -65,7 +65,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             self.model.saveCurrent(silently: true)
         }
         _ = registerShortcut(model.shortcut)
-        configureMenuBar()
+        configureMenuBar(localSuccessSoundURL: base.appendingPathComponent("record-success.wav"))
         configureApplicationMenu()
         configureTelemetry()
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(willSleep),
@@ -79,7 +79,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
 
-    private func configureMenuBar() {
+    private func configureMenuBar(localSuccessSoundURL: URL) {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = item.button {
             let image = NSImage(systemSymbolName: "clipboard", accessibilityDescription: "剪贴板")
@@ -89,7 +89,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             button.target = self
             button.action = #selector(statusClicked(_:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
-            recordFeedback = StatusItemFeedback(button: button, log: model.log)
+            recordFeedback = StatusItemFeedback(button: button, log: model.log,
+                                                localSuccessSoundURL: localSuccessSoundURL)
         }
         statusItem = item
     }

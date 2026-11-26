@@ -9,23 +9,30 @@ final class StatusItemFeedback {
     private let normalTint: NSColor?
     private let normalAlpha: CGFloat
     private let log: RuntimeLog?
+    private let localSuccessSoundURL: URL?
     private let soundPlayer: ((Bool) -> Bool)?
-    private lazy var successSound = Self.loadSuccessSound()
+    private lazy var successSound = Self.loadSuccessSound(localURL: localSuccessSoundURL)
     private lazy var failureSound = NSSound(named: "Basso")
     private var flashTask: Task<Void, Never>?
 
-    init(button: NSButton, log: RuntimeLog? = nil, soundPlayer: ((Bool) -> Bool)? = nil) {
+    init(button: NSButton, log: RuntimeLog? = nil, localSuccessSoundURL: URL? = nil,
+         soundPlayer: ((Bool) -> Bool)? = nil) {
         self.button = button
         normalImage = button.image
         normalTint = button.contentTintColor
         normalAlpha = button.alphaValue
         self.log = log
         self.soundPlayer = soundPlayer
+        self.localSuccessSoundURL = localSuccessSoundURL
     }
 
-    static func loadSuccessSound() -> NSSound? {
-        guard let url = Bundle.module.url(forResource: "record-success", withExtension: "wav") else { return nil }
-        return NSSound(contentsOf: url, byReference: false)
+    static func loadSuccessSound(localURL: URL? = nil,
+                                 fallback: () -> NSSound? = { NSSound(named: "Ping") }) -> NSSound? {
+        if let localURL, FileManager.default.isReadableFile(atPath: localURL.path),
+           let custom = NSSound(contentsOf: localURL, byReference: false) {
+            return custom
+        }
+        return fallback()
     }
 
     @discardableResult
